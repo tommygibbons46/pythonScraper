@@ -23,13 +23,11 @@ colleges = []
 
 def main():
 
-    for kw in keywords:
+    for kw in keywords[223:300]:
         # get search results for this keyword
-        time.sleep(random.choice([250]))
+        time.sleep(random.choice([10,20,30]))
         print kw
         resp = requests.get(SEARCH_URL, params={'v':'1.0', 'q':kw + "undergraduate+admissions+contact+us"})
-        print resp
-        print resp.content
         data = json.loads(resp.content)
         results = data['responseData']['results']
 
@@ -53,21 +51,22 @@ def main():
         urlDict = {"college" : kw,
         			"admissions_URL" : url,
         			"emails" : best_emails}
-
         if len(best_emails) == 0:
 	        urlDict = {"college" : kw,
 	        			"admissions_URL" : url,
 	        			"emails" : list(new_emails)}
-
-
+		
+	writeWithDict(urlDict)
         # add dictionary to list of colleges 
-        colleges.append(urlDict)
+        # colleges.append(urlDict)
 
 
-    with open('names3.csv', 'wb') as csvfile:
-	    writer = csv.writer(csvfile)
-	    for iCollege in colleges:
-	    		writer.writerow([iCollege['college'], iCollege['admissions_URL'], iCollege['emails']])
+def writeWithDict(urlDict):
+	# print "we got called"
+    with open('names3.csv', 'a') as csvfile:
+    	writer = csv.writer(csvfile)
+	    # for iCollege in colleges:
+	writer.writerow([urlDict['college'], urlDict['admissions_URL'], urlDict['emails']])
 
 
 
